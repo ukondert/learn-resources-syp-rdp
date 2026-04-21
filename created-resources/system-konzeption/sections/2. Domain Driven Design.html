@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2. Domain Driven Design.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="2-domain-driven-design-ddd--backend-architektur">2. Domain-Driven Design (DDD) – Backend-Architektur</h1>
+<p><em>Komplexe Software scheitert oft nicht an der Technologie, sondern daran, dass der Code die fachliche Wirklichkeit nicht mehr widerspiegelt. DDD löst genau dieses Problem.</em></p>
+<p>Stellen Sie sich vor, die Fachleute sagen „Bestellung&quot;, die Entwickler sprechen aber intern von einem <code>OrderRecord</code> – und meinen dabei manchmal dasselbe, manchmal aber auch nicht. Dieses Missverständnis wächst mit der Zeit und wird zur Hauptquelle von Bugs und Fehlentscheidungen. DDD begegnet dem, indem Fachsprache und Code zur selben Sprache werden.</p>
+<hr>
+<h2 id="21-kernkonzepte-des-ddd">2.1 Kernkonzepte des DDD</h2>
+<p><em>DDD ist mehr als ein technisches Muster – es ist ein Ansatz, der Softwareentwicklung als gemeinsame Disziplin von Fach- und Technikseite versteht.</em></p>
+<h3 id="was-ist-domain-driven-design">Was ist Domain-Driven Design?</h3>
+<p>Domain-Driven Design ist ein Ansatz zur Softwareentwicklung, der die Fachdomäne in den Mittelpunkt stellt. Statt generische Bezeichner wie <code>DataManager</code> oder <code>ItemProcessor</code> zu verwenden, soll der Code die Sprache der Anwender und Fachexperten widerspiegeln.</p>
+<ul>
+<li><strong>Fokus auf die Domäne:</strong> Die Fachlogik (das „Geschäft&quot;) steht im Mittelpunkt – nicht die Datenbank, nicht das Framework.</li>
+<li><strong>Vorgehen:</strong> Fachliche Anforderungen analysieren, ein Domänenmodell ableiten und dieses Modell in Softwarebausteinen abbilden.</li>
+<li><strong>Modell als Kern:</strong> Das Domänenmodell ist das Herzstück des Systems – alle anderen Teile dienen ihm.</li>
+</ul>
+<blockquote>
+<p><strong>Beispiel:</strong> In einem Online-Shop sprechen Fachleute von &quot;Sendungsverfolgung&quot; und &quot;Retourenmanagement&quot;. DDD sorgt dafür, dass diese Begriffe als <code>Shipment</code>, <code>Return</code> oder <code>OrderStatus</code> direkt im Code vorkommen.</p>
+</blockquote>
+<h3 id="ziele-von-ddd">Ziele von DDD</h3>
+<p>DDD verfolgt drei zentrale Ziele:</p>
+<ol>
+<li><strong>Komplexität beherrschen</strong> – durch ein Modell, das das Geschäft genau beschreibt.</li>
+<li><strong>Kommunikation verbessern</strong> – mit einer einheitlichen Fachsprache zwischen Domänenexperten und Entwicklern (<em>Ubiquitous Language</em>).</li>
+<li><strong>Architektur stützen</strong> – indem die Struktur der Software die Struktur des Geschäfts widerspiegelt.</li>
+</ol>
+<h3 id="strategisches-vs-taktisches-design--die-zwei-ebenen-von-ddd">Strategisches vs. Taktisches Design – Die zwei Ebenen von DDD</h3>
+<p>DDD unterscheidet zwei Entwurfsebenen, die sich gegenseitig ergänzen:</p>
+<ul>
+<li><strong>Strategisches Design:</strong> Blick auf das ganze System und dessen Abgrenzungen.
+<ul>
+<li>Hier entstehen Begriffe wie <em>Bounded Context</em>, <em>Core Domain</em> und <em>Subdomain</em>.</li>
+<li>Beispiel: In der Schulbibliothek gibt es einen Ausleih-Kontext, einen Anschaffungs-Kontext und einen Nutzerprofil-Kontext.</li>
+</ul>
+</li>
+<li><strong>Taktisches Design:</strong> Blick auf die Detailmodelle innerhalb eines Kontextes.
+<ul>
+<li>Hier entstehen Entitäten, Value Objects, Aggregate und Domänenregeln.</li>
+<li>Beispiel: Ein <code>AusleihExemplar</code> ist eine Entität mit eindeutiger <code>InventarId</code>.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><span style="font-size: 1.5em"><img class="emoji" alt="bulb" src="data:image/png;base64,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" /></span> <strong>Merksatz:</strong> DDD bedeutet: Schreibe Code, der die Fachsprache spricht – so versteht jeder im Team, was eine Klasse tut, ohne die Implementierung zu kennen.</p>
+</blockquote>
+<p><em>Mit den Kernkonzepten im Blick betrachten wir nun die erste Ebene im Detail: das <strong>strategische Design</strong>, das das System in fachlich sinnvolle Bereiche gliedert und eine gemeinsame Sprache festlegt.</em></p>
+<hr>
+<h2 id="22-strategisches-design--bounded-contexts--ubiquitous-language">2.2 Strategisches Design – Bounded Contexts &amp; Ubiquitous Language</h2>
+<p><em>Im großen Maßstab teilt DDD komplexe Systeme in klar abgegrenzte Fachbereiche auf – und gibt ihnen eine gemeinsame Sprache.</em></p>
+<h3 id="ubiquitous-language--die-gemeinsame-fachsprache">Ubiquitous Language – Die gemeinsame Fachsprache</h3>
+<p>Die <strong>Ubiquitous Language</strong> ist eine gemeinsame Sprache, die alle Projektbeteiligten verwenden – in Gesprächen, in Dokumenten und im Code.</p>
+<ul>
+<li><strong>Einheitliche Begriffe:</strong> Fachexperten, Entwickler und Tester sprechen dieselbe Sprache.</li>
+<li><strong>Im Code sichtbar:</strong> Klassen, Methoden und Variablen verwenden diese Begriffe direkt.</li>
+<li><strong>Enge Zusammenarbeit:</strong> Entwickler und Fachexperten (Domain Experts) erarbeiten das Modell gemeinsam.</li>
+<li><strong>Wirkung:</strong> Reduzierte Missverständnisse und bessere, selbsterklärende Dokumentation.</li>
+</ul>
+<blockquote>
+<p><strong>Schulbibliotheks-Beispiel:</strong></p>
+<ul>
+<li><code>Ausleihe</code> statt <code>LoanAction</code></li>
+<li><code>Ausleiher</code> statt <code>User</code></li>
+<li><code>Mahnwesen</code> statt <code>ReminderProcess</code></li>
+<li><code>Vormerkung</code> statt <code>Reservation</code></li>
+</ul>
+</blockquote>
+<p>Diese Begriffe werden in Meetings, Dokumenten und im Code einheitlich verwendet, z. B. <code>class Ausleihe</code>, <code>method sendeMahnung()</code>.</p>
+<h4 id="attribute-eines-guten-ubiquitous-language-eintrags">Attribute eines guten Ubiquitous-Language-Eintrags</h4>
+<p>Damit die Ubiquitous Language nicht nur eine lose Vokabelliste bleibt, sondern zum echten Arbeitswerkzeug wird, sollte jeder Eintrag folgende Attribute besitzen:</p>
+<ol>
+<li><strong>Fachbegriff (Term):</strong> Das präzise Wort in der Sprache der Domäne – keine technischen Begriffe wie „User&quot; oder „Database-Entry&quot;.</li>
+<li><strong>Bounded Context (Geltungsbereich):</strong> Ein Wort kann in verschiedenen Kontexten unterschiedliche Bedeutungen haben – der Kontext macht den Begriff eindeutig.</li>
+<li><strong>Fachliche Definition:</strong> Eine klare Erklärung in der Sprache der Experten – keine technischen Details.</li>
+<li><strong>Invarianten &amp; Geschäftsregeln:</strong> Welche Regeln müssen für diesen Begriff <em>immer</em> gelten? (Grundlage für die Aggregat-Logik)</li>
+<li><strong>Beispiele &amp; Szenarien:</strong> Kurze „Wenn-Dann&quot;-Sätze, die den Begriff in Aktion zeigen – helfen, API-Aktionen zu identifizieren.</li>
+<li><strong>Klassifizierung (DDD-Rolle):</strong> <code>Aggregat</code>, <code>Entität</code>, <code>ValueObject</code>, <code>DomainService</code> usw. – die Brücke zur technischen Umsetzung.</li>
+<li><strong>Synonyme &amp; Anti-Begriffe (No-Gos):</strong> Welche Synonyme existieren? Welche Begriffe sollen explizit <strong>nicht</strong> verwendet werden?</li>
+</ol>
+<h3 id="bounded-context--fachliche-grenzen-ziehen">Bounded Context – Fachliche Grenzen ziehen</h3>
+<p>Ein <strong>Bounded Context</strong> ist eine klar definierte Grenze, innerhalb derer ein Domänenmodell eindeutig und konsistent gilt.</p>
+<ul>
+<li><strong>Bounded Context:</strong> Eine klar definierte Grenze, innerhalb derer ein Domänenmodell eindeutig und konsistent gilt.</li>
+<li><strong>Context Map:</strong> Eine Übersicht, wie verschiedene Bounded Contexts miteinander in Beziehung stehen.</li>
+</ul>
+<p><strong>Schulbibliotheks-Beispiel – drei Bounded Contexts:</strong></p>
+<ul>
+<li><strong>Ausleih-Kontext:</strong> <code>AusleihExemplar</code>, <code>Ausleiher</code>, <code>Mahnwesen</code></li>
+<li><strong>Anschaffungs-Kontext:</strong> <code>BuchkatalogEintrag</code>, <code>Bestellung</code>, <code>Lieferant</code></li>
+<li><strong>Nutzerprofil-Kontext:</strong> <code>Benutzerkonto</code>, <code>Rolle</code>, <code>Klasse</code></li>
+</ul>
+<blockquote>
+<p><span style="font-size: 1.5em"><img class="emoji" alt="warning" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAMMElEQVR42uWbCVBUVxZAP93N1s0qDdrsqGAQFzajokZHhWBc44I4I1HRaBYn0RnNUhMLUzMTs2islOOQscy+mImJJrGjwRExAq5REZXFaECRbvZFUNnv3BsefuzXX7qBWECoOvXev9u79/5fdr/3WwEAftc88AXxzwJRILaIHcOWySz6dAPwT4bYIGpkIBJEsLma6WR9sgF0d1mBmohAm0fS3h/yRdGPE38maE4y0jEbi77YAEvEdZC7Ytz1A6HnoTAeoHwtQBmC87z9oed93BURZEO2faoB7NF3QIYe2j54d0vBEmipWI+sE0EZ6ciG2cr6UgOsEc+4aPul9Zem17eU/wVaWdsKuyYd2ZAt+fSJBrC774SEnPw4ML1F/2Rr0WXP3QPJSHfy46B0smU+sr7QAGvEe/lM+3UN2TMam8v+DM1lqxnPitB1+WogG7IlnwfxFDyIu++MRJz7IiijWRcPzaXYgJJn2vG0OC9dDWRDtuTDfGW9qwH8x57f2oVOrzblzmhuLfYpaC5eZZwSBPVNuTObyYd8WQyL3tgAOdIPmZi1Z0RuU+ESaMIim4qeRFbSyM0JsiFb8iFfFkPeqxrA7r4t4r8hvt+WpsuzsLgV0KRvz3KCl9FIjbg8E8iXYrBYFr2pAXJEbW0tRF7VhuQ33lgMjfp4aNQtk8BAR7YFi+GqNjifYlCs3+op+K3uvhIZsnm1+j+Nl2ewwpZAY+ETJkP25EsxKBaLadEbGqBAXNXOwoyCpBB94/VFWFAc4FMgTSEvIx/ypRgUi2JS7B7dAHb3VUjQjhfcPm3IfQwabvwJGgoWMf5IiHMm564Z5EsxEte7fcq+IqtojZ7cAEuk/xBv+QJ9ckh5/bUFUF8QC/XXFxoD7zTRdm1gh9fkSzH0ycHlgz3k8yl2d2+Uuvvu2yEjP0vQ7K3PicYiYqiAdswHGlt0MQC34wDqiMWtcx0Wnc9sCOZDMSjWJxiTYrM1LHpiAywRzehAy7jSH0Nr6vIeh7r8echckby5AEXzAaoWwc7NYTBulAuMCXeBxE2hAJWxqIshG2YvQrEoJsWmNbrzKeju7W7o3k2apLqcSEwcG5A3B5nNmAONKIOahbA0xoec7mHRHC+AmwvxHz7m1x5qQk4UUGy0DRO3yz2nAVaIR2S49aqKtNA7d67OhDu/8EDx45B3MpIcjJKbOhWgdC4Y9b86C6rSwu5EhluuorVozR7RAHb3HZGHD27VpN7JnowJT8eEH+OAktmQe3SyZAMyD00EKJttzBdjzoA72VOA1kDbUWxNWU9ogDXiFTPRem11enDD7Z8fhVai7oFkUDANKi9GgqXCwmgDis9OBSicDu1iiCOb0xpzJ1ivoTW7Y7vcXYcdEan/dv/p9qVHMMlIuH15qlEaf4kC0EWDxs2aK17tbAUt16OgKT9K0p9i0xqpie6n0WdsdxyadMd212flNJsNNceDm27l/gFu5U5GaOSpuzwZoDoaQoc7cA0Y6m8HUBkNdVeM+7bFJmqOj2xagWvS2l3dLnd1w+OMTDj9vufF2gsRUJszCWqzJzIeYeCcjbcQqIqC2FluXAPmPKrGBkRigaK9GEOMRWvQWqd2ul+ktSmHrmyUunr3B62bb/t67cnhLbVZE6CV8cZhOqicAhvX+HINeOlpb9RN5eylYtGa62KUr1EOXXkKunL3XXDXMznzI48rNZkPQ82lCGRs28jDdFA6CT7bGsA14P23/AHKJokxRPi4WTjPHA2ZH3v8jL6TKJfOPgVdOewI2LhEua3mRBDUXBwDNRdG49gxUDAO0r8exjUgZVcQQOE4sjGRMUBrJ8Sp3qFcOnto0untrspaeDRnl8eNmxlhcDNzFBJOIz9n122yliujQX8ylGtA/tEQgKuj29tKxGBcQNm5MMj53KOAcunsoUlnDzse2vyU6r2bJwIxGWzA+VCTqcsOx0PPMHB2UtwtXmUrg7qscKhHHe8TJn1Nax8PhM0rVe9RTp05NOnM3XfzchHmXNntXlJ9dgRUZwQjIxnBhCgzwq3MYIBrYRA+QnW3AcOG2ALkhcKtiyESfsFtI8+5EXDlK02xu5Mwm3Iz99CkM9vd4e8+b/dl1bEAqMLFq84OR9hoIlAUBgunO99twOypjgB6vKOkNxPKgXJJfE61C2MNM3e7bO52d8AIX/mia3s1lVU/DcUEgqDqjCFDRSTkUDgSNjwrfhdYt8IVGxAs+pyVisXHJSiX/D2aykAveSzlaM522ZyvvPZIyCcvqrSVaYOg8kwgVP70kBmI9pA3DD7d4il+BL7mAZA/jHSdikm5UE4frVfuw3jBLFeL7myAFeIeMUS+rPC7/rUVp/yh4lSACF6LBEiPDMh9CE7vFr8Mpe/yIZl0HBFp+Ul/uPFN/9pR/nJ6u6wxdbtszmFH+J6NqsMVaT5QcXowLjrIBIzbNVz0h2spfncbcPWQH8lI1zVSfeDrBFWyOYcmpt59z2nhstU6rVtd+XE/KD8xEPETQRmT0yiBqKs+PRCaLgwCL40lDFDLoe78IKg5zfQdIK5HOfBy3T63uqhg2TOUsylPgamHHaP3/8PuePlRT1zExwR8O7S5fc4X9Ee9QXfEG25n+HH6Tq1xAmWYo/bvynTK2ZRDE5Pe7cdMkL1QpFU3lh3zgrJ0xq9zT4LNOZhctGNyTNYLWi55A+T7Ib40RxnpjXBM9BVlbXN+JIq0Lo0LxsnWm3JoYsq7/fEpbykzyo5oMLgHlKV1FnegseKYB0CuNyTtcIXYaCVBc5KRjuwYvK90XHFOOVKuKW8qz2Hu4zo6NOnw3f7KaMXGYq1zc2mqBkpTB4jQNZOZptNgghqAbHfY9rIjtxcgGWRREe1jcXOJ+LyOco6fKkvA2L732y53+G7/2Du22aUprlB6tD/ixo+pBM15SC/SH/fw/UF/2I0VzVOEOrTh1iCkY/O2lBPlnL5VmdXRbwzu+25//VzF5pLvnaDkR1eG2mBEjqgRUcb0BNMjTN541hWOfOAs2YDUD52h4awb+XJwOXDrE+KcKNY6wV9nK97E2IOltsvS7/YVQuSZf9nklyT3w6AuUJJCIwPnKEMMZTQSvB3Nb51ygay9kg0gHdr04+IymMzFYOTyEm0x9zPbbfIUCmGK1KGJ5Lv9hFh5YvH3DlCc4gzFhw1xYqNxHYOzLT3iDHC+H8yaZMkVTzLSlaYY+ImxpNcXc+TlWgdIiJFtl/qNgdHDDmel8NiFd631xYewAcmOPIfZaKaOqDnmCNVpjrB0phXQ+wGC5jfTSHc/386tSTVkJNoUOlgL04z9xsDYu/2hW5bJPynap4KiZHsoOiSFQwdyB0mb6lR7gAxHKD3sgPw6R5lDR/HN0DuIJCNYy1tPyD809hsD7t3+QDdhXvZOy7KiJGzAQcb/aORAuR3SXm/H2XMwfckhFVSm2CE0b/OheBRDjCexLr+eqOPWolqyd1qVeboIcw1/Y8AddiSuku/R77MB/UElTxIbOWyN2NqKOmlf3oaga1FHcHmIkE4cpeJTTdtXyXcbHprcc9QV4ivEXv5AUa1PogYgGJTmIsZktve3O8j5PQCoGQayH2wg9z1F1QisUTw6ExtggwzZtkL2uf5bK3RAfrBmWN1LEpOLen4UYbEYnK30nF3zSK9Na3Fz8Rr51hK2LRc+o1qp5vYNUCFjjrwuy9FpLUF3QAG6/ZYdc4DoyE4hjrzcTBRsXTPXYj5UW8o/Zdlsp6gybMCkE5struu05Nw3odqOY41Uq2ED7JEJiU8KB3Vfy9EYOaBgcHMaObkkvA+nQ8z0U0gg7UtQbdtXCAepVqrZ8AkIV6uENd//Tbhe+KUFFH4jg8JvjSE3S87ofp/v5KbHoFq+lIH2FeGaq0p4nmo1fAKskABknpuj8EbCAuHM7heE0r0vC1V7XhRufvWSUNMbodypBqrllXnCGSx+E9XIarUy/B7ggYxH4pFXkR3If5HvkP3IAcYPPRoxz/2UO6thB6tpGavR3dg3QXvWmSlIHLIW2Yi8gWxB3ka29hLeZjm/jiQga5DFrLYAqlVqM+TCPiMjkGnIfNaMpezJWN5LiGc5x1ENrJaxrDaXjs4DHBAP1qmRyChkDAsQ0UsYy3IexWoIYDU5mHMkpkScEDXbQAzoZVDOalaDUupI7Hf/3+f/D/WnwPHv0AmHAAAAAElFTkSuQmCC" /></span> <strong>Achtung:</strong> Die Kontexte verwenden unterschiedliche Modelle für dasselbe reale Objekt. Ein Buch im Ausleih-Kontext ist nicht dasselbe wie ein Buch im Anschaffungs-Kontext. Sie können über eine gemeinsame ID wie <code>ISBN</code> verbunden werden, aber die internen Modelle bleiben getrennt.</p>
+</blockquote>
+<h3 id="domänenkategorisierung--nicht-alles-ist-gleich-wichtig">Domänenkategorisierung – Nicht alles ist gleich wichtig</h3>
+<p>DDD hilft, Domänen nach ihrem fachlichen Wert und ihrer Komplexität zu priorisieren:</p>
+<ul>
+<li><strong>Warum es wichtig ist:</strong> Verhindert, dass ein einziges, überwachsendes Modell das gesamte System lähmt.</li>
+</ul>
+<h4 id="core-domain">Core Domain</h4>
+<p>Die wichtigste Domäne, in der der größte Geschäftswert liegt.</p>
+<ul>
+<li>Merkmale: hohe Komplexität, starke Spezifik, ständige Weiterentwicklung.</li>
+<li>Beispiel Schulbibliothek: der <strong>Ausleih-Kontext</strong>.
+<ul>
+<li>Prozesse: Ausleihe, Rückgabe, Vormerkung, Mahnwesen.</li>
+<li>Regeln: unterschiedliche Leihfristen für Schüler und Lehrer, Ausleihlimit, Strafen bei Verspätung.</li>
+<li>Modell: <code>AusleihExemplar</code>, <code>Ausleiher</code>, <code>Leihfrist</code>.</li>
+</ul>
+</li>
+</ul>
+<h4 id="supporting-subdomain">Supporting Subdomain</h4>
+<p>Ein unterstützender Bereich, der wichtig ist, aber keinen Wettbewerbsvorteil liefert.</p>
+<ul>
+<li>Merkmale: mittlere Komplexität, notwendige Funktionalität.</li>
+<li>Beispiel Schulbibliothek: der <strong>Anschaffungs-Kontext</strong>.
+<ul>
+<li>Prozesse: Bestellung, Rechnung, Lieferantenauswahl.</li>
+<li>Modell: <code>BuchkatalogEintrag</code>, <code>Lieferant</code>, <code>Bestellung</code>.</li>
+<li>Umsetzung: pragmatisch mit CRUD-Funktionen.</li>
+</ul>
+</li>
+</ul>
+<h4 id="generic-subdomain">Generic Subdomain</h4>
+<p>Eine Standarddomäne, die meist mit fertigen Lösungen abgedeckt werden kann.</p>
+<ul>
+<li>Merkmale: geringe Spezifik, weit verbreitete Anforderungen.</li>
+<li>Beispiel Schulbibliothek: der <strong>Nutzerprofil-Kontext</strong>.
+<ul>
+<li>Prozesse: Anmeldung, Rollenverwaltung.</li>
+<li>Modell: <code>Benutzerkonto</code>, <code>Passwort</code>, <code>Rolle</code>.</li>
+<li>Umsetzung: oft durch fertige Bibliotheken wie Auth0, Keycloak oder ASP.NET Core Identity.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><span style="font-size: 1.5em"><img class="emoji" alt="bulb" src="data:image/png;base64,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" /></span> <strong>Merksatz:</strong> Investiere den größten Aufwand in die <strong>Core Domain</strong> – dort liegt der Wert des Systems. Für Generic Subdomains gilt: kaufe, statt selbst zu bauen.</p>
+</blockquote>
+<p><em>Nachdem das System strategisch gegliedert ist, betrachten wir die Detailarbeit innerhalb eines Bounded Context: das <strong>taktische Design</strong> mit seinen konkreten Codebausteinen.</em></p>
+<hr>
+<h2 id="23-taktisches-design--bausteine-des-ddd">2.3 Taktisches Design – Bausteine des DDD</h2>
+<p><em>Innerhalb eines Bounded Context beschreibt das taktische Design die konkreten Bausteine des Codes – von der einzelnen Klasse bis zur Schichtenarchitektur.</em></p>
+<h3 id="kernelemente-des-taktischen-designs">Kernelemente des taktischen Designs</h3>
+<p>Im taktischen Design entstehen die Bausteine, die das Domänenmodell in Code übersetzen:</p>
+<ul>
+<li><strong>Entity:</strong> Ein Objekt mit eindeutiger Identität, das sich über die Zeit verändern kann.
+<ul>
+<li>Beispiel: <code>AusleihExemplar</code> mit <code>InventarId</code>.</li>
+</ul>
+</li>
+<li><strong>Value Object:</strong> Ein unveränderliches Objekt ohne eigene Identität, das nur durch seine Werte definiert wird.
+<ul>
+<li>Beispiel: <code>Signatur</code> oder <code>Leihfrist</code>.</li>
+</ul>
+</li>
+<li><strong>Aggregate:</strong> Eine Gruppe zusammengehöriger Entities und Value Objects mit einer klaren Außengrenze und einer <em>Aggregate Root</em> als einzigem Zugangspunkt.
+<ul>
+<li>Beispiel: <code>Ausleiher</code> als Root, das <code>Reservierung</code> und <code>Ausleihe</code>-Objekte koordiniert.</li>
+<li><strong>Wichtigkeit:</strong> Aggregate sind die Stelle, an der <strong>Invarianten durchgesetzt</strong> werden. Sie schützen die Konsistenz, indem sie Änderungen nur innerhalb ihres definierten Gültigkeitsbereichs zulassen.</li>
+<li><strong>Invarianten im Ausleih-Kontext:</strong> Ein Ausleiher darf nicht mehr als 3 aktive Reservierungen haben; ein <code>InventarAusleihexemplar</code> darf nur ausgeliehen sein, wenn es verfügbar ist.</li>
+</ul>
+</li>
+<li><strong>Invariante:</strong> Eine Geschäftsregel, die immer gelten muss.
+<ul>
+<li>Beispiel: Ein Schüler darf nicht mehr als 5 Bücher gleichzeitig ausleihen.</li>
+</ul>
+</li>
+</ul>
+<h3 id="ddd-services-und-repository">DDD-Services und Repository</h3>
+<p>Neben Aggregaten gibt es im taktischen DDD weitere wichtige Bausteine für die Schichtenarchitektur:</p>
+<ul>
+<li><strong>Application Service:</strong> Orchestriert Use Cases – die einzige Stelle, die direkt auf Repositories zugreift.
+<ul>
+<li>Aufgabe: Koordiniert Schritte eines Anwendungsfalls, z. B. eine Reservierung prüfen und speichern.</li>
+<li>Beispiel: <code>AusleiheApplicationService</code> ruft <code>AusleiherRepository</code> und <code>AusleihExemplarRepository</code> auf.</li>
+</ul>
+</li>
+<li><strong>Domain Service:</strong> Führt domänenlogische Aktionen aus, die nicht sauber zu einem einzigen Aggregat gehören.
+<ul>
+<li>Beispiel: <code>ReservierungsService</code> prüft, ob ein Ausleiher eine zusätzliche Vormerkung anlegen darf, ohne selbst ein Aggregat zu sein.</li>
+</ul>
+</li>
+<li><strong>Repository:</strong> Abstraktion der Datenspeicherung für Aggregate – der Code spricht mit dem Repository, nicht direkt mit der Datenbank.
+<ul>
+<li>Aufgabe: Aggregate laden und speichern, ohne Detailwissen über die Persistenz.</li>
+<li>Beispiel: <code>AusleiherRepository</code> lädt einen <code>Ausleiher</code> mit seinen Ausleihungen.</li>
+</ul>
+</li>
+<li><strong>Domain Events:</strong> Signalisieren, dass etwas Wichtiges in der Domäne passiert ist (z. B. <code>BuchWurdeReserviert</code>). Andere Systemteile können auf dieses Event reagieren, ohne direkt mit dem Aggregat verbunden zu sein.</li>
+</ul>
+<blockquote>
+<p><span style="font-size: 1.5em"><img class="emoji" alt="mag" src="data:image/png;base64,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" /></span> <strong>Vertiefung:</strong> Die vier Schichten einer DDD-Anwendung: <strong>Presentation Layer</strong> (Controller/REST) → <strong>Application Layer</strong> (Application Services) → <strong>Domain Layer</strong> (Aggregates, Entities, Domain Services) → <strong>Infrastructure Layer</strong> (Repository-Implementierungen, Datenbank).</p>
+</blockquote>
+<hr>
+<h3 id="24-praxisbeispiel--use-case-buch-reservierung">2.4 Praxisbeispiel – Use Case „Buch Reservierung&quot;</h3>
+<p><em>Wie arbeiten alle Bausteine zusammen? Am Beispiel der Buchreservierung lässt sich der gesamte Ablauf – von der REST-Anfrage bis zur Datenbankpersistierung – schrittweise nachvollziehen.</em></p>
+<h4 id="user-story-vs-use-case">User Story vs. Use Case</h4>
+<p>Eine <strong>User Story</strong> beschreibt die Motivation und den Nutzen für den Anwender – sie bleibt bewusst abstrakt und technologiefrei. Ein <strong>Use Case</strong> hingegen beschreibt die konkrete Ablaufsteuerung im System: Welche Schritte werden intern ausgeführt, welche Regeln geprüft und welche Komponenten sind beteiligt?</p>
+<p>Am selben Beispiel „Buch reservieren&quot; zeigt sich der Unterschied deutlich:</p>
+<hr>
+<p><strong>User Story – Sicht des Anwenders</strong></p>
+<blockquote>
+<p><em>Als <strong>Schüler</strong> möchte ich ein <strong>verfügbares Buch vormerken</strong>, damit ich es zu einem späteren Zeitpunkt in der Bibliothek abholen kann.</em></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Attribut</th>
+<th>Inhalt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>US-AK-01</td>
+</tr>
+<tr>
+<td><strong>Rolle</strong></td>
+<td>Schüler (Ausleiher mit Rolle <code>SCHUELER</code>)</td>
+</tr>
+<tr>
+<td><strong>Ziel</strong></td>
+<td>Buch vormerken, ohne es sofort mitzunehmen</td>
+</tr>
+<tr>
+<td><strong>Nutzen</strong></td>
+<td>Sicherstellung, dass das Buch beim Abholen verfügbar ist</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Akzeptanzkriterien:</strong></p>
+<ul>
+<li><strong>AC-1:</strong> Wenn ein Schüler ein Buch vormerkt, das mindestens ein verfügbares physisches Exemplar hat, wird die Reservierung erfolgreich angelegt und eine Abholfrist von 7 Tagen gesetzt.</li>
+<li><strong>AC-2:</strong> Wenn der Schüler bereits 3 aktive Reservierungen hat, wird die Reservierung abgelehnt und eine verständliche Fehlermeldung angezeigt.</li>
+<li><strong>AC-3:</strong> Wenn kein physisches Exemplar verfügbar ist (alle ausgeliehen oder reserviert), wird die Reservierung abgelehnt.</li>
+<li><strong>AC-4:</strong> Nach erfolgreicher Reservierung erhält der Schüler eine Bestätigung mit der <code>ReservierungsId</code> und der Abholfrist.</li>
+<li><strong>AC-5:</strong> Ein Lehrer (Rolle <code>LEHRER</code>) kann bis zu 5 aktive Reservierungen gleichzeitig halten.</li>
+</ul>
+<hr>
+<p><strong>Use Case – Sicht des Systems</strong></p>
+<blockquote>
+<p><code>ReserviereBuch(ausleiherId: UUID, ausleihexemplarId: UUID): ReservierungResponse</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Attribut</th>
+<th>Inhalt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-AK-01</td>
+</tr>
+<tr>
+<td><strong>Akteur</strong></td>
+<td>Schüler / Lehrer (authentifizierter <code>Ausleiher</code>)</td>
+</tr>
+<tr>
+<td><strong>Vorbedingung</strong></td>
+<td>Ausleiher ist authentifiziert; <code>Ausleihexemplar</code> existiert im System</td>
+</tr>
+<tr>
+<td><strong>Nachbedingung (Erfolg)</strong></td>
+<td><code>Reservierung</code>-Entity im <code>Ausleiher</code>-Aggregat angelegt; <code>InventarAusleihexemplar</code> auf <code>RESERVED</code> gesetzt; Domain Event <code>BuchWurdeReserviert</code> ausgelöst</td>
+</tr>
+<tr>
+<td><strong>Nachbedingung (Fehler)</strong></td>
+<td>Kein Datenbankzustand geändert; <code>DomainException</code> zurückgegeben</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Normalablauf:</strong></p>
+<ol>
+<li>Die Anfrage zur Buchreservierung wird entgegengenommen und die Eingabedaten werden geprüft.</li>
+<li>Das System lädt die relevanten fachlichen Objekte, etwa den Ausleiher und das Ausleih-Exemplar.</li>
+<li>Die fachlichen Regeln werden geprüft:
+<ul>
+<li>Invariante: Der Ausleiher darf die maximale Anzahl aktiver Reservierungen nicht überschreiten.</li>
+<li>Invariante: Es muss ein verfügbares physisches Exemplar vorhanden sein.</li>
+</ul>
+</li>
+<li>Das Reservierungsverhalten wird auf dem Domänenmodell ausgeführt:
+<ul>
+<li>Ein verfügbares Exemplar wird als reserviert markiert.</li>
+<li>Eine neue Reservierung wird für den Ausleiher angelegt.</li>
+<li>Falls vorgesehen, wird ein Domain Event zum Reservierungserfolg erzeugt.</li>
+</ul>
+</li>
+<li>Alle Änderungen werden in einer konsistenten Transaktion gespeichert.</li>
+<li>Das System sendet eine Erfolgsantwort zurück, die z. B. die Reservierungs-ID und die Abholfrist enthält.</li>
+</ol>
+<p><strong>Alternative Abläufe:</strong></p>
+<ul>
+<li><strong>[A1] Reservierungslimit erreicht:</strong> Die Regelprüfung schlägt fehl → Reservierung wird abgelehnt und eine geeignete Fehlermeldung wird zurückgegeben.</li>
+<li><strong>[A2] Kein Exemplar verfügbar:</strong> Die Regelprüfung schlägt fehl → Reservierung wird abgelehnt und eine geeignete Fehlermeldung wird zurückgegeben.</li>
+</ul>
+<hr>
+<blockquote>
+<p><span style="font-size: 1.5em"><img class="emoji" alt="bulb" src="data:image/png;base64,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" /></span> <strong>Merksatz:</strong> Die User Story beantwortet <em>Warum</em> und <em>Was</em> aus Nutzersicht – der Use Case beantwortet <em>Wie</em> aus Systemsicht. Die Akzeptanzkriterien der User Story werden direkt zu den <strong>Invarianten</strong> im DDD-Aggregat.</p>
+</blockquote>
+<h4 id="allgemeiner-ablauf-eines-use-cases-im-ddd">Allgemeiner Ablauf eines Use Cases im DDD</h4>
+<p>Folgender Ablauf skizziert die Durchführung eines Use-Cases vom Empfang der Daten über das REST-API bis zur Speicherung in der Datenbank:</p>
+<ol>
+<li><strong>Controller</strong>: Übernimmt die Daten, die über das REST-API übermittelt werden (z. B. <code>AusleiherId</code>, <code>AusleihExemplarId</code>).</li>
+<li><strong>ApplicationService</strong>: Orchestriert den Use Case:
+<ol>
+<li>Laden der benötigten <strong>Aggregate</strong> über die <strong>Repositories</strong> (z. B. <code>Ausleihexemplar</code>, <code>Ausleiher</code>)</li>
+<li>Ausführung des <strong>Domain Service</strong> oder direkter Aktionen auf <strong>Aggregaten</strong> (z. B. <code>reserviereBuch</code>)
+<ol>
+<li>Prüfung der <strong>Invarianten</strong> im Aggregat (z. B. max. 3 aktive Reservierungen)</li>
+<li>Auslösen von <strong>Domain Events</strong> (z. B. <code>BuchWurdeReserviert</code>)</li>
+</ol>
+</li>
+<li>Speicherung der geänderten <strong>Aggregate</strong> über die <strong>Repositories</strong></li>
+</ol>
+</li>
+</ol>
+<h4 id="klassendiagramm--alle-schichten-im-überblick">Klassendiagramm – Alle Schichten im Überblick</h4>
+<p>Das folgende Klassendiagramm zeigt alle beteiligten Hauptklassen des Ausleih-Kontexts über <strong>alle vier Schichten</strong> hinweg – von der REST-Schnittstelle bis zu den Repository-Ports.</p>
+<p>Die <code>Ausleihexemplar</code>–<code>InventarAusleihexemplar</code>-Beziehung verdeutlicht, dass ein logisches <code>Ausleihexemplar</code> (z. B. „Das Parfum – ISBN 978-3-257-22800-7&quot;) mehrere physische <code>InventarAusleihexemplar</code> besitzen kann, von denen jedes einen eigenen Status trägt.</p>
+<p><em>Farbkodierung: 🟢 Aggregate Root · 🔵 Entity · ⬜ Repository-Interface · 🟠 Service · 🟧 Controller/DTO</em></p>
+<img src="http://www.plantuml.com/plantuml/svg/hLZRRjis6BxtKx3kHPGcJfEb6LeZC-g3ada9wi1s0cmeKD0MBMkHAPMalAH3WBt3NY6FqJk_oPvaFtKYTOfT9pAGY8V_oEy_K1-vm4m42xVsCNtRGHSkvfnGoy4smuj54zruhil5wX6cRC9GE-0kSUQD2uyASYVGV__yYwuvGLqCVuQ44xPq22ETO3glrLvPPEPGWjhdvqFpl3qsltG7buCXUltXq3G_7ARhvgTnV_nxijZkzTwRFwUBD-tBQ_FBeFERsHqdMyxWCHNzqBmQ94kzO_bBbqRcyARVJGMVdVJCZbhjZeUNYgVvhdEIBlN60qtQ-rwtLkEt3lKnk0LDfPVGtpK4Jvinxw-kvteClJuvbBzmkkCnYx3i_8F6miVJMsoJc4dPxd0UTjdC2wWLhvsrvGyumLdziiq3T5SCpeaAB1oFeajyJzZMp18hwaMUoFXrFBvwEpH7uzrwR6RajnGc0RMxW2C648FzfwTgq6hfPnCHosUFPI1cCF8r85mqCpo7qUHk4qaDq4-7HugU2uzHIQuJ64mRyBxLHDVN_PwYVnVIFrIO48i3_G4peBX2ZgOtZkA6i8HxSUcEB7mNPpTKo-I-Ho7adXHQQfOcU3Btt1bpfFyklIbsUrYGMEop0DRsVTUPlYY-2Yoh8SMrlICvEvLkqXd4i-2sR7fGhckavpKaljTCqbuqv0w0wBwuDpx0B8KscQUpl0Ls4XMp4EOzVKsHD2eZeG2mVLG1BC3rqdEiTJ5Hmh0gJ59spyHDPFHBGKRd5jQfVEqokXuZiT0mHLK1AdCOCkGYpkjXjBV4hcDLkrO3rlvdYl8dLa1HrjVXlnq0HKEnQRHjcn4R2pcjsPDkaA4GRu72wNa2rC_Nvyto5iKBGEr8C8VQ6Ynb_jO3HeuLW7K84Gfv1xBFgUwSLZ6kacq9pzOcyQ1GluySkfIrANnNIMyt6tBRreXiB8KAIWL0MKENom82fHnFI28xiKRHscGIaluHX9jJc5GAm_GRdhljM-4iPMRIFMl0PeSA7Ib5O0CMJ2eSSGyOoFHWFr13dYXUuGRbWwVAJpjzBsgSE6eJRVCksqYFYCR2q0Bd2s7aWipH0Meou-fWZ7soBYJZRLi6PhNZ-GG2fp_gV59pu3tY5cAsaVZ6Z9cHEE3wyNnEqtNnTqFOB23s11ZnXAN4OrQ_X5l2d1hv8ohWFI690qJ6omPKSoogDEfudaimBMAkml9D85WDDBXcYO0tK-QZSBp6cKR17eZrKAVYYkrCajnHM8FpL5wei7sdf8w4QOGmk15TU8kmXu4EAhhuf2MbVbH7Rm3uzSE3W-DwDiN0qqHWxdprw4B9NU2x0tIy-mI3DtKLyV7JH726UHNpqRLUqUGGKsb7eRIgirPgfw9ZKOtLzmbXyExCuAeixxqpE2dwZL1aq82XS1drUpniEsw9l4yE9d-IMm6z1_IXu9TNaGiohZeuQ1LqLIvWiH3OB289dsaX2Q0zhTXbZ0-vLvbQBK7ZzgpMhazd37F1Wga8eEbweHQlZ2ioLA_TkFAOuEdrCmJ834CFLzBFGsoh0SItzb51Y-wPGwtEVTyo79Lk1hw46dRJ1aNBa7iSBqbfmrU8K8kuHApV-r1XIk6YyO865H9_GWOrnb25PZVNg1N9GczisDu-2s-ZwToPpWMX3MWjLe_KTco8GnXlpRFYgqMZqLfx-vJ19K_Nbf5LnKZ6PzbdXUm3IMdXpwH1Fy0e_bQGOoG_yn78RUkqbnQMnOl6obqzMk8jzmduF6_YEfP5t6xDyebBcsIPNCRoDcTtwbcOAHDzjle-4viIfear9QoLkR1KbX9968Tm2ZMkzbPvrSXIrpx2MOUVUgF__mC0" alt="uml diagram">
+<h4 id="ablaufphasen-des-use-cases-im-detail">Ablaufphasen des Use Cases im Detail</h4>
+<p>Die folgenden Sequenzdiagramme beleuchten jede Phase des Ablaufs einzeln. So lässt sich die Verantwortlichkeit jeder Schicht und jedes Objekts isoliert nachvollziehen.</p>
+<p><strong>Phase ①: Aggregat-Instanzen laden</strong></p>
+<p>Der Application Service empfängt die Anfrage und lädt beide benötigten Aggregate aus der Datenbank. Er sieht nur die Aggregat-Wurzeln – die internen Strukturen (z. B. <code>InventarAusleihexemplar</code>-Liste) werden vom Repository transparent mitgeliefert.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    actor Schueler as Schüler
+    participant C as ReservierungController
+    participant AS as ReservierungsApplicationService
+    participant AR as AusleiherRepository
+    participant ER as AusleihexemplarRepository
+
+    Schueler->>C: POST /reservierungen {ausleiherId, ausleihexemplarId}
+    activate C
+    C->>AS: reserviereBuch(ausleiherId, ausleihexemplarId)
+    activate AS
+
+    Note over AS,ER: Phase ① – Aggregat-Instanzen laden
+    AS->>AR: findById(ausleiherId)
+    AR-->>AS: Ausleiher (inkl. aktive Reservierungen)
+    AS->>ER: findById(ausleihexemplarId)
+    ER-->>AS: Ausleihexemplar (inkl. InventarAusleihexemplare)
+
+    Note over AS: Beide Aggregate bereit für Validierung
+    deactivate AS
+    deactivate C
+</div></code></pre>
+<p><strong>Phase ②: Domänen-Validierung</strong></p>
+<p>Der <code>ReservierungsDomainService</code> prüft aggregatübergreifende Geschäftsregeln: Darf der Ausleiher noch reservieren? Hat das logische Exemplar einen freien physischen Bestand? Diese Logik gehört in den Domain Service, weil sie beide Aggregate gleichzeitig betrifft – keines der beiden Aggregate kennt das andere.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    participant AS as ReservierungsApplicationService
+    participant DS as ReservierungsDomainService
+    participant A as Ausleiher
+    participant E as Ausleihexemplar
+
+    Note over AS,E: Phase ② – Domänen-Validierung
+    AS->>DS: validiereReservierung(ausleiher, ausleihexemplar)
+    activate DS
+
+    DS->>A: anzahlAktiverReservierungen()
+    A-->>DS: anzahl (z. B. 2)
+
+    DS->>E: hatVerfuegbaresExemplar()
+    E-->>DS: true
+
+    Note over DS: Invariante 1: anzahl < 3 ✓<br/>Invariante 2: hatVerfuegbaresExemplar() == true ✓
+
+    DS-->>AS: OK (bei Verletzung: DomainException)
+    deactivate DS
+</div></code></pre>
+<p><strong>Phase ③: Exemplar-Status ändern (Ausleihexemplar-Aggregat)</strong></p>
+<p>Das <code>Ausleihexemplar</code>-Aggregat verwaltet seinen Zustand autonom: Es wählt selbstständig ein freies physisches Exemplar (<code>InventarAusleihexemplar</code> mit Status <code>AVAILABLE</code>) und setzt es auf <code>RESERVED</code>. Nach außen gibt es nur die <code>inventarId</code> zurück – kein Objekt, nur die ID. Das schützt die Aggregatgrenze.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    participant AS as ReservierungsApplicationService
+    participant E as Ausleihexemplar
+    participant IE as InventarAusleihexemplar
+
+    Note over AS,IE: Phase ③ – Exemplar-Status ändern (Ausleihexemplar-Aggregat)
+    AS->>E: reserviereVerfuegbaresExemplar()
+    activate E
+
+    E->>IE: findeExemplarMitStatus(AVAILABLE)
+    Note over IE: Sucht erstes InventarAusleihexemplar<br/>mit status = AVAILABLE
+    IE-->>E: inventarExemplar
+
+    E->>IE: reserviere()
+    Note over IE: Statusübergang:<br/>AVAILABLE → RESERVED
+    IE-->>E: OK
+
+    E-->>AS: inventarId (UUID des reservierten Exemplars)
+    deactivate E
+</div></code></pre>
+<p><strong>Phase ④: Reservierung anlegen (Ausleiher-Aggregat)</strong></p>
+<p>Das <code>Ausleiher</code>-Aggregat schützt seine eigene Invariante (max. 3 aktive Reservierungen), legt die neue <code>Reservierung</code>-Entity mit den übermittelten IDs und der berechneten Abholfrist an und löst das Domain-Event <code>BuchWurdeReserviert</code> aus. Andere Systemteile (z. B. E-Mail-Service) können auf dieses Event reagieren, ohne direkt mit dem Aggregat verbunden zu sein.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    participant AS as ReservierungsApplicationService
+    participant A as Ausleiher
+    participant R as Reservierung
+
+    Note over AS,R: Phase ④ – Reservierung anlegen (Ausleiher-Aggregat)
+    AS->>A: reserviereBuch(ausleihexemplarId, inventarId, abholfrist)
+    activate A
+
+    Note over A: Prüft Invariante erneut:<br/>anzahlAktiverReservierungen < 3
+
+    A->>R: new Reservierung(id, exemplarId, inventarId, abholfrist)
+    R-->>A: reservierung
+
+    Note over A: Reservierung zur internen Liste hinzugefügt<br/>Domain-Event ausgelöst: BuchWurdeReserviert
+
+    A-->>AS: Reservierung
+    deactivate A
+</div></code></pre>
+<p><strong>Phase ⑤: Beide Aggregate persistieren</strong></p>
+<p>Abschließend speichert der <strong>Application Service</strong> beide Aggregate in <strong>einer gemeinsamen Datenbanktransaktion</strong>. Würde man die Transaktion aufteilen, könnte ein Systemfehler zu einem inkonsistenten Zustand führen: ein physisches Exemplar mit Status <code>RESERVED</code>, aber ohne zugehörige <code>Reservierung</code>-Entity im Ausleiher.</p>
+<pre><code class="language-mermaid"><div class="mermaid">sequenceDiagram
+    participant AS as ReservierungsApplicationService
+    participant AR as AusleiherRepository
+    participant ER as AusleihexemplarRepository
+    participant C as ReservierungController
+    actor Schueler as Schüler
+
+    Note over AS,ER: Phase ⑤ – Beide Aggregate persistieren (eine Transaktion)
+
+    rect rgb(220, 240, 220)
+        Note over AS,ER: BEGIN TRANSACTION
+        AS->>AR: save(ausleiher)
+        Note over AR: Persistiert Ausleiher<br/>inkl. neuer Reservierung-Entity
+        AR-->>AS: OK
+
+        AS->>ER: save(ausleihexemplar)
+        Note over ER: Persistiert Ausleihexemplar<br/>inkl. InventarAusleihexemplar (status: RESERVED)
+        ER-->>AS: OK
+        Note over AS,ER: COMMIT
+    end
+
+    AS-->>C: reservierungsId + abholfrist
+    C-->>Schueler: HTTP 201 Created {reservierungsId, abholfrist}
+</div></code></pre>
+<hr>
+<h3 id="zusammenfassung">Zusammenfassung</h3>
+<p>Kapitel 2 zeigt, wie DDD hilft, Backend-Systeme fachlich zu strukturieren. Es erklärt, wie man Domänen identifiziert, klare Grenzen schafft und Fachsprache in Code übersetzt. Die drei Hauptbereiche – <strong>Kernkonzepte</strong>, <strong>strategisches Design</strong> und <strong>taktisches Design</strong> – bauen aufeinander auf: vom großen Bild (Bounded Contexts, Domänenkategorien) bis zu den konkreten Codebausteinen (Aggregates, Entities, Repositories).</p>
+<blockquote>
+<p><span style="font-size: 1.5em"><img class="emoji" alt="bulb" src="data:image/png;base64,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" /></span> <strong>Merksatz:</strong> DDD ist kein Framework, das man installiert – es ist eine Denkweise, die man anwendet. Der größte Wert entsteht durch die enge Zusammenarbeit zwischen Fachexperten und Entwicklern.</p>
+</blockquote>
+<p><em>Das Domänenmodell lebt auch in der Datenbank. Wie man DDD-Konzepte auf Tabellen und Schemas überträgt, ohne die Fachlogik zu kompromittieren, zeigt das nächste Kapitel: <strong>Datenbank-Design im DDD-Kontext</strong>.</em></p>
+
+</body>
+</html>

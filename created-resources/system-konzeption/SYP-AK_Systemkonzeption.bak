@@ -1,0 +1,94 @@
+# 📘 Moderne Systemkonzeption & Architektur
+
+## Kapitel 1: Grundlagen der Systemkonzeption
+*Dieses Kapitel führt in die wichtigsten Elemente ein, die eine gute Systemkonzeption ausmachen. Es ist die Basis, damit Schüler verstehen, worauf es beim Aufbau von Software ankommt.*
+
+### 1.1 Systemarchitektur
+Die Systemarchitektur beschreibt die grundlegende Struktur eines Softwaresystems. Sie legt fest, wie das System in Teile zerlegt wird, wie diese Teile zusammenarbeiten und wie das System später betrieben werden kann.
+
+* **Grundstruktur:** Wie ist das System aufgebaut? Welche großen Bausteine gibt es?
+* **Aufteilung in Module:** Welche Aufgaben hat jedes Modul? Wie trennt man Funktionen sinnvoll?
+* **Kommunikation:** Wie tauschen die Module Daten aus? Zum Beispiel per REST, Nachrichten oder direktem Datenbankzugriff.
+* **Deployment:** Wie wird das System bereitgestellt? In der Cloud, auf eigenen Servern oder in Containern?
+
+### 1.2 Design-Prinzipien
+Design-Prinzipien helfen, ein System sauber und langfristig wartbar zu bauen.
+
+* **DDD (Domain-Driven Design):** Eignet sich besonders für das Backend, um Geschäftslogik und Fachsprache im Code abzubilden.
+* **CDD (Component Driven Design):** Hilft im Frontend, wiederverwendbare Komponenten zu entwickeln.
+* **Ziel:** Baue das System so, dass es leicht erweitert, geändert und verstanden werden kann.
+
+### 1.3 Datenmodellierung
+Die Datenmodellierung zeigt, wie Informationen im System strukturiert und gespeichert werden.
+
+* **ER-Diagramme:** Darstellung von Objekten und ihren Beziehungen.
+* **Datenbankschema:** Tabellen, Felder und Verknüpfungen.
+* **Datenflüsse:** Wie wandern Daten zwischen Komponenten?
+* **Persistenzstrategien:** Welche Speicherformen sind sinnvoll? Zum Beispiel relationale Datenbanken (SQL) oder dokumentenorientierte Speicher (NoSQL).
+
+### 1.4 Schnittstellen-Design
+Schnittstellen sind die Verbindungspunkte zwischen Systemen und Komponenten.
+
+* **REST / GraphQL:** Beliebte Arten, wie Systeme miteinander sprechen.
+* **Datenformate:** JSON, XML oder andere Formate für den Datenaustausch.
+* **Authentifizierung & Autorisierung:** Wer darf auf welche Daten zugreifen?
+* **API-Dokumentation:** Dokumentiere die Schnittstellen gut, zum Beispiel mit OpenAPI/Swagger.
+
+### 1.5 Qualitätsanforderungen & Verhalten
+Hier geht es um die Eigenschaften, die das System erfüllen muss, ohne direkt neue Funktionen zu definieren.
+
+* **Performance:** Wie schnell muss das System reagieren?
+* **Skalierbarkeit:** Kann das System mehr Nutzer oder Daten aufnehmen?
+* **Sicherheit:** Wie werden Daten geschützt?
+* **Wartbarkeit:** Wie einfach sind Änderungen möglich?
+* **Verfügbarkeit:** Wie oft muss das System erreichbar sein?
+* **Systemverhalten:** Wie verhält sich das System zur Laufzeit? Zum Beispiel mit Sequenz- oder Aktivitätsdiagrammen.
+
+### 1.6 Technologiewahl & Betrieb
+Die Wahl der Technologien bestimmt, wie das System umgesetzt und betrieben wird.
+
+* **Programmiersprachen:** Zum Beispiel Java, Dart oder C#.
+* **Frameworks:** Zum Beispiel Spring für Backend oder Flutter für Frontend.
+* **Datenbanken:** PostgreSQL, MongoDB oder andere Datenbanken.
+* **Tools:** CI/CD, Docker, Monitoring und Logging.
+* **Betrieb:** Wie wird das System ausgeliefert, überwacht und gewartet?
+
+### Zusammenfassung
+Kapitel 1 zeigt, wie wichtig der erste Plan für ein Softwareprojekt ist. Eine klare Systemkonzeption sorgt dafür, dass das Projekt später stabil, erweiterbar und verständlich bleibt.
+
+
+## Kapitel 2: Component Driven Design (CDD) – Frontend-Architektur bauen
+*Wie man Benutzeroberflächen modular, wiederverwendbar und konsistent aufbaut.*
+* **Die Kernprinzipien des CDD:** Isolation, Komposition und Wiederverwendbarkeit im Gegensatz zu klassischer, seitenbasierter (Page-based) Entwicklung.
+* **Atomic Design:** Die Einteilung von UI-Elementen in 5 Ebenen:
+  1. *Atoms* (kleinste Bausteine wie Buttons)
+  2. *Molecules* (Gruppen wie Suchfelder)
+  3. *Organisms* (komplexe Abschnitte wie Navigationsleisten)
+  4. *Templates* (Layout-Strukturen)
+  5. *Pages* (fertig befüllte Seiten)
+* **Smart vs. Dumb Components:** Die strikte Trennung zwischen Daten-Managern (Smart: rufen APIs auf, verwalten State) und reinen Anzeige-Komponenten (Dumb: erhalten nur Daten, reine Optik).
+
+## Kapitel 3: APIs als Bindeglied zwischen Frontend und Backend
+*Wie CDD und DDD als getrennte Welten optimal miteinander kommunizieren.*
+* **Arten von APIs:**
+  * *REST (OpenAPI):* Gut für Standard-Ressourcen und einfachere Domänen.
+  * *GraphQL:* Perfekt für komplexe Frontend-Komponenten, da der Client genau die Daten anfragen kann, die er braucht (Kein Over-Fetching).
+  * *Event-basiert (AsyncAPI):* Für Echtzeit-Daten und Benachrichtigungen.
+* **Schnittstellen-Planung:** Warum "API-First" und "Consumer-Driven Contracts" wichtig sind, damit Frontend- und Backend-Teams unabhängig arbeiten können.
+* **Das BFF-Pattern:** "Backend for Frontend" – ein kleines Übersetzer-Backend, das komplexe Daten aus dem DDD-Backend mundgerecht für die CDD-Komponenten des Frontends aufbereitet.
+
+## Kapitel 4: Datenbank-Design im DDD-Kontext
+*Wie man fachliche DDD-Logik in Tabellen und Datenbanken übersetzt.*
+* **Persistence Ignorance:** Die Regel, dass man zuerst die Geschäftslogik designt, als gäbe es gar keine Datenbank, und das Speichern erst danach löst.
+* **Aggregates als Konsistenzgrenzen:** Warum ein Datenbank-Schreibvorgang (Transaktion) idealerweise immer nur genau ein Aggregate auf einmal ändern sollte.
+* **Mapping von DDD-Bausteinen:**
+  * *Entities* werden oft zu eigenen Tabellen mit eindeutigen IDs (bevorzugt UUIDs).
+  * *Value Objects* werden oft als Inline-Spalten oder JSON-Felder in der gleichen Tabelle gespeichert.
+* **Trennung von Schreib- & Lesedaten (CQRS):** Warum man Daten für das Frontend (Lesen) oft anders strukturiert ablegt als für die komplexen Geschäftsregeln (Schreiben).
+
+## Kapitel 5: Moderne Fullstack-Architektur & Vertical Slices
+*Zusammenführung aller Teile zu einer modernen, agilen Architektur (besonders stark in Kombination mit Künstlicher Intelligenz).*
+* **Das Problem der klassischen Schichten:** Warum horizontale Schichten-Architekturen (Datenbank, Backend, Frontend) oft zu starr sind.
+* **Vertical Slice Architektur:** Code nach *Geschäftsfunktionen (Features)* organisieren (z.B. "Warenkorb") – von der UI bis zur Datenbank durch alle Ebene hinweg, um Unabhängigkeit zu schaffen.
+* **Architekturwahl nach Domänen-Typ:** Zum Beispiel *Clean Architecture* für komplexe Core Domains und einfache Schichtenarchitektur für Supporting Domains.
+* **Vorteil in der AI-Assisted Development:** Warum KIs (wie Copilot) besser programmieren können, wenn Slices strikt getrennt sind: Es gibt klare Grenzen, feste API-Verträge und der gesamte Feature-Kontext befindet sich an einem logischen Ort.
