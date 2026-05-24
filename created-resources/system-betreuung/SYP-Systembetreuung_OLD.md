@@ -48,24 +48,13 @@ In der IT bedeutet Systembetreuung, dass man Software-Systeme, Infrastruktur und
 
 Systembetreuung baut auf folgenden zentralen Konzepten auf:
 
-1.  **`Verfügbarkeit`**: Die Fähigkeit eines Systems, zuverlässig und ohne Unterbrechung zu funktionieren. In der Praxis bedeutet das, Ausfälle früh zu erkennen, Gegenmaßnahmen vorzubereiten und kritische Dienste möglichst ohne längere Unterbrechung bereitzustellen.
-2.  **`Skalierbarkeit`**: Die Möglichkeit, ein System bei Bedarf zu vergrößern oder zu verkleinern. Skalierbarkeit hilft, mehr Nutzer oder mehr Last zu bewältigen, ohne Architektur und Betrieb jedes Mal grundlegend neu aufbauen zu müssen.
-3.  **`Sicherheit und Compliance`**: Schutz vor unautorisiertem Zugriff, Datenverlust und Angriffen sowie die Einhaltung definierter Richtlinien und Vorgaben. Dazu gehören unter anderem Netzwerksegmentierung, Verschlüsselung, Zugriffskontrollen, Secret-Management und nachvollziehbare Prozesse.
-4.  **`Reproduzierbarkeit und Automatisierung`**: Die Fähigkeit, dieselbe Umgebung mehrfach konsistent aufzubauen und Änderungen kontrolliert auszurollen. Das ist wichtig für Tests, Deployments, Infrastructure as Code und das schnelle Wiederherstellen nach Fehlern.
-5.  **`Monitoring`**: Laufende Überwachung von Systemzustand und Leistung. Monitoring liefert wichtige Daten zu Latenz, Auslastung, Fehlerraten und Verfügbarkeit und hilft, Probleme früh zu erkennen und fundiert zu reagieren.
-
-Diese Grundkonzepte bilden den roten Faden für die folgenden Kapitel: Cloud- und Virtualisierungsgrundlagen schaffen die technische Basis, Application Management beschreibt den kontrollierten Betrieb und die Automatisierung, Monitoring und Hochverfügbarkeit sichern den laufenden Service, und Security ergänzt den Betrieb um Hardening, Vertrauensmodelle und Compliance-Anforderungen.
+1.  **`Verfügbarkeit`**: Die Fähigkeit eines Systems, zuverlässig und ohne Unterbrechung zu funktionieren. In der Praxis bedeutet das, Ausfälle früh zu erkennen und zu verhindern.
+2.  **`Skalierbarkeit`**: Die Möglichkeit, ein System bei Bedarf zu vergrößern oder zu verkleinern. Skalierbarkeit hilft, mehr Nutzer oder mehr Last zu bewältigen, ohne das System neu zu erfinden.
+3.  **`Sicherheit`**: Schutz vor unautorisiertem Zugriff, Datenverlust und Angriffen. Sicherheit umfasst Firewalls, Verschlüsselung, Zugangskontrollen und regelmäßige Updates.
+4.  **`Reproduzierbarkeit`**: Die Fähigkeit, dieselbe Umgebung mehrfach gleich aufzubauen. Das ist wichtig für Tests, Deployments und das schnelle Wiederherstellen nach Fehlern.
+5.  **`Monitoring`**: Laufende Überwachung von Systemzustand und Leistung. Monitoring liefert wichtige Daten zu Latenz, Auslastung, Fehlerraten und hilft, Probleme früh zu erkennen.
 
 > <span style="font-size: 1.5em">:bulb:</span> **Merksatz:** Gute Systembetreuung macht Software nicht nur funktionsfähig, sondern auch zuverlässig, sicher und skalierbar.
-
-***
-Quellen
-
-- [Monitoring Distributed Systems – Google SRE Book](https://sre.google/sre-book/monitoring-distributed-systems/)
-- [What is high availability? – IBM](https://www.ibm.com/think/topics/high-availability)
-- [What is Infrastructure as Code (IaC)? – Red Hat](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac)
-- [Authorization Cheat Sheet – OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)
-***
 
 ---
 
@@ -177,7 +166,7 @@ networks:
 
 #### Was das Beispiel zeigt
 
-- `depends_on` steuert hier die Startreihenfolge der Container. Ob `db` und `mailhog` fachlich bereits bereit sind, muss bei Bedarf zusätzlich über `healthcheck` und gegebenenfalls `condition: service_healthy` abgesichert werden.
+- `depends_on` stellt sicher, dass `backend` erst startet, wenn `db` und `mailhog` eingerichtet sind.
 - `volumes` sichern die Datenbankdaten, damit sie beim Neustart erhalten bleiben.
 - `networks` erlauben die Kommunikation der Container untereinander mit sicheren Service-Namen.
 
@@ -193,15 +182,6 @@ Für die Systembetreuung ist wichtig:
 - Der Zugriff auf sensible Daten muss sicher erfolgen.
 - Logs und Metriken müssen zentral erfasst werden.
 
-***
-Quellen
-
-- [The NIST Definition of Cloud Computing – NIST](https://csrc.nist.gov/pubs/sp/800/145/final)
-- [Docker overview](https://docs.docker.com/get-started/docker-overview/)
-- [Docker Compose: Control startup and shutdown order](https://docs.docker.com/compose/how-tos/startup-order/)
-- [Docker Compose file reference: depends_on](https://docs.docker.com/reference/compose-file/services/#depends_on)
-***
-
 ## 2.3. Cloud-Services
 
 Cloud-Services bieten Infrastruktur und Dienste über das Internet. Die wichtigsten Modelle sind:
@@ -209,12 +189,6 @@ Cloud-Services bieten Infrastruktur und Dienste über das Internet. Die wichtigs
 - **IaaS (Infrastructure as a Service)**: Virtuelle Server, Speicher und Netzwerk als Bausteine.
 - **PaaS (Platform as a Service)**: Laufzeitumgebungen, Datenbanken und Entwicklerplattformen.
 - **SaaS (Software as a Service)**: Fertige Anwendungen, die direkt genutzt werden.
-
-Konkrete Beispiele helfen, die Unterschiede besser einzuordnen:
-
-- **IaaS - Beispiel: Amazon EC2**: Der Anbieter stellt virtuelle Maschinen, Speicher und Netzwerkressourcen bereit. Betriebssystem, Laufzeitumgebung und die eigene Anwendung werden jedoch weiterhin vom Betreiber verwaltet.
-- **PaaS - Beispiel: Microsoft Azure App Service**: Der Anbieter betreibt die Plattform für Webanwendungen bereits weitgehend fertig. Entwickler konzentrieren sich vor allem auf den Anwendungscode, während viele Infrastruktur- und Plattformaufgaben im Hintergrund übernommen werden.
-- **SaaS - Beispiel: Microsoft 365**: Die Anwendung wird direkt als fertiger Dienst genutzt. Der Betreiber der Organisation verwaltet hauptsächlich Benutzer, Berechtigungen und Richtlinien, nicht aber Server oder Laufzeitumgebungen.
 
 Das **Shared Responsibility Model** beschreibt, wer für welche Ebene zuständig ist:
 - Der Anbieter kümmert sich um Infrastruktur, Hardware und oft auch Plattform-Sicherheit.
@@ -286,12 +260,9 @@ Canary Deployment dient dem **Risikomanagement bei neuen Releases**: Anstatt all
 ```mermaid
 flowchart LR
     U([Alle Nutzer]) --> LB[Load Balancer]
-  LB -->|95% Traffic| V1[Version 1.0
-  Stabile Prod.]
-  LB -->|5% Traffic| V2[Version 2.0
-  Canary]
-  V2 --> M[📊 Monitoring
-  & Metriken]
+    LB -->|95% Traffic| V1[Version 1.0\nStabile Prod.]
+    LB -->|5% Traffic| V2[Version 2.0\nCanary]
+    V2 --> M[📊 Monitoring\n& Metriken]
     M -->|OK: Traffic erhöhen| LB
     M -->|Fehler: Rollback| LB
     style V2 fill:#f0ad4e,color:#fff
@@ -365,16 +336,12 @@ resource "aws_instance" "web_server" {
   <mrow>
     <mi>f</mi>
     <mo>(</mo>
-    <mrow>
-      <mi>f</mi>
-      <mo>(</mo>
-      <mi>x</mi>
-      <mo>)</mo>
-    </mrow>
+    <mi>f</mi>
+    <mo>(</mo>
+    <mi>x</mi>
     <mo>)</mo>
-  </mrow>
-  <mo>=</mo>
-  <mrow>
+    <mo>)</mo>
+    <mo>=</mo>
     <mi>f</mi>
     <mo>(</mo>
     <mi>x</mi>
@@ -390,8 +357,6 @@ In der Praxis bedeutet das: Ein IaC-Skript kann hundertmal ausgeführt werden �
 
 Wenn die Infrastruktur als Code vorliegt, kann sie in einem **Versionskontrollsystem (Git)** gespeichert werden. Das bringt entscheidende Vorteile:
 
-<div style="width: 35%; margin:auto;">
-
 ```mermaid
 flowchart TD
     Dev[👩‍💻 Entwicklerin
@@ -404,13 +369,11 @@ flowchart TD
     CI --> Apply[🚀 Terraform Apply
     Infrastruktur wird angepasst]
     Apply --> Prod[☁️ Cloud-Infrastruktur
-    Production]
+    Prodution]
     style Git fill:#f5a623,color:#fff
     style CI fill:#4a90d9,color:#fff
     style Prod fill:#5cb85c,color:#fff
 ```
-
-</div>
 
 **Vorteile der "Single Source of Truth":**
 
@@ -651,8 +614,6 @@ Diese vier Signale decken unterschiedliche Fehlermuster ab:
 - **Fehler** machen Störungen direkt sichtbar.
 - **Sättigung** zeigt drohende Überlast oft schon, bevor Nutzer echte Ausfälle bemerken.
 
-<div style="width: 60%; margin: auto;">
-
 ```mermaid
 flowchart TD
   U[Nutzeranfragen] --> T[Traffic]
@@ -667,8 +628,6 @@ flowchart TD
   style E fill:#d9534f,color:#fff
   style S fill:#5cb85c,color:#fff
 ```
-
-</div>
 
 In der Praxis werden diese Metriken häufig in Dashboards zusammengeführt. Besonders wichtig ist dabei nicht nur der Mittelwert, sondern auch das Verhalten am Rand der Verteilung, etwa bei **p95**- oder **p99**-Latenzen. Ein guter Durchschnitt kann täuschen, wenn ein kleiner Teil der Anfragen extrem langsam ist.
 
@@ -857,8 +816,6 @@ Zentrale Prinzipien sind:
 - **Kontinuierliche Bewertung**: Vertrauen wird nicht einmalig vergeben, sondern laufend neu überprüft.
 - **Mikrosegmentierung**: Kleine, getrennte Sicherheitsbereiche verhindern seitliche Bewegungen im Netzwerk.
 
-<div style="width: 50%; margin: auto;">
-
 ```mermaid
 flowchart TD
   U[Benutzer oder Dienst] --> ID[Identität prüfen
@@ -877,8 +834,6 @@ flowchart TD
   style RES fill:#d4edda,stroke:#5cb85c
   style DENY fill:#f8d7da,stroke:#d9534f
 ```
-
-</div>
 
 Für die Systembetreuung bedeutet das konkret:
 
@@ -920,8 +875,6 @@ Beim **TLS-Handshake** handeln Client und Server aus, wie eine sichere Verbindun
 
 Der genaue Ablauf haengt von der verwendeten TLS-Version ab. Insbesondere zwischen **TLS 1.2** und **TLS 1.3** gibt es Unterschiede bei den Handshake-Schritten und den unterstuetzten Schluesselaustauschverfahren. Die folgende Darstellung ist deshalb bewusst vereinfacht.
 
-<div style="width: 60%; margin: auto;">
-
 ```mermaid
 sequenceDiagram
   participant C as Client
@@ -934,8 +887,6 @@ sequenceDiagram
   C->>S: Finished
   C->>S: Verschlüsselte HTTP-Anfragen
 ```
-
-</div>
 
 Vereinfacht läuft ein TLS-Handshake in diesen Schritten ab:
 

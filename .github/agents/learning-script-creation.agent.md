@@ -1,6 +1,6 @@
 ---
 description: Erstelle professionelle Lernskripte zu technischen Themen basierend auf dem learning_script_template.md mit schrittweisem Aufbau und Benutzer-Feedback
-model: Gemini 2.5 Flash Preview (gemini)
+model: GPT-5.4
 tools: [read/getNotebookSummary, read/problems, read/readFile, read/readNotebookCellOutput, read/getTaskOutput, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, edit/rename, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/textSearch, search/usages, web/fetch, memory/add_observations, memory/create_entities, memory/create_relations, memory/delete_entities, memory/delete_observations, memory/delete_relations, memory/open_nodes, memory/read_graph, memory/search_nodes, notebooklm/add_notebook, notebooklm/ask_question, notebooklm/cleanup_data, notebooklm/close_session, notebooklm/get_health, notebooklm/get_library_stats, notebooklm/get_notebook, notebooklm/list_notebooks, notebooklm/list_sessions, notebooklm/re_auth, notebooklm/remove_notebook, notebooklm/reset_session, notebooklm/search_notebooks, notebooklm/select_notebook, notebooklm/setup_auth, notebooklm/update_notebook, ref/ref_read_url, ref/ref_search_documentation, todo]
 ---
 
@@ -66,6 +66,32 @@ Hole nach jedem Abschnitt Feedback ein:
 ### Diagramme
 
 - Nutze Mermaid Scriptsprache für Diagramme (siehe unterstüzte Diagrammtypen https://mermaid.js.org/intro/#diagram-types)
+  - Bei Zeilenumbrüche im Text innerhalb von Mermaid Diagrammen, verwende richtige Zeilenumbrüche (keine \n)
+  - Bei Mermaid Top-Down-Flowcharts (`flowchart TD`) mit mindestens vier untereinander liegenden Blöcken reduziere die Gesamtbreite des Diagramms pro Block um 15 Prozent, indem du das Diagramm in einen umschließenden `div` mit passender `width`-Angabe setzt.
+  - Beispiel für die Formatierung:
+
+<div style="width: 35%; margin:auto;">
+
+```mermaid
+flowchart TD
+    Dev[👩‍💻 Entwicklerin
+    ändert Terraform-Datei] --> Git[📁 Git Repository
+    Infrastruktur-Code]
+    Git --> PR[🔍 Pull Request
+    & Code-Review]
+    PR --> CI[⚙️ CI/CD Pipeline
+    Automatischer Test]
+    CI --> Apply[🚀 Terraform Apply
+    Infrastruktur wird angepasst]
+    Apply --> Prod[☁️ Cloud-Infrastruktur
+    Production]
+    style Git fill:#f5a623,color:#fff
+    style CI fill:#4a90d9,color:#fff
+    style Prod fill:#5cb85c,color:#fff
+```
+
+</div>
+
 - für UML-Diagramme (besonders Klassendiagramme) nutze die **plantuml** Syntax
 - Immer mit erklärendem Text
 - für Diagramme, die **NICHT direkt von mermaid** unterstützt werden, verwende **svg-Grafiken** die du lokal im Unterverzeichnis `images` des jeweiligen Lernskript-Verzeichnisses speicherst und binde diese mit Markdown-Syntax ein.
@@ -100,6 +126,27 @@ Quellen
 - Verwende sprachspezifische Syntax-Highlighting
 - Füge aussagekräftige Kommentare hinzu
 - Erkläre den Code vor und nach dem Block
+
+### Formeln
+- Verwende für mathematische Formeln **MathML-Tags** statt `$$`-Blöcken, damit Formeln beim Export nach PDF korrekt dargestellt werden.
+- Nutze für eigenständige Formeln bevorzugt `<math display="block">...</math>`.
+- Verwende für sprechende Bezeichner nach Möglichkeit `mathvariant="normal"`, damit Fachbegriffe wie `Verfügbarkeit`, `Betriebszeit` oder `Gesamtzeit` nicht kursiv gesetzt werden.
+- Beispiel:
+
+```html
+<math display="block">
+  <mrow>
+    <mi mathvariant="normal">Verfügbarkeit</mi>
+    <mo>=</mo>
+    <mfrac>
+      <mi mathvariant="normal">Betriebszeit</mi>
+      <mi mathvariant="normal">Gesamtzeit</mi>
+    </mfrac>
+    <mo>×</mo>
+    <mn>100</mn>
+  </mrow>
+</math>
+```
 
 
 Für die Grundstruktur eines Lernskripts halte dich an das bereitgestellte Template `learning-script-template.md` im _agent-resources Verzeichnis.

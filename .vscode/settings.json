@@ -1,0 +1,27 @@
+{
+  "markdown-preview-enhanced.automaticallyShowPreviewOfMarkdownBeingEdited": true,
+  "markdown-preview-enhanced.mathRenderingOption": "MathJax",
+  "markdown-preview-enhanced.mathInlineDelimiters": [
+    [
+      "$",
+      "$"
+    ],
+    [
+      "\\(",
+      "\\)"
+    ]
+  ],
+  "markdown-preview-enhanced.mathBlockDelimiters": [
+    [
+      "$$",
+      "$$"
+    ],
+    [
+      "\\[",
+      "\\]"
+    ]
+  ],
+  "markdown-preview-enhanced.printBackground": true,
+  "markdown-preview-enhanced.previewTheme": "github-light.css",
+  "markdown-preview-enhanced.codeBlockTheme": "auto.css"
+}
