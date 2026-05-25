@@ -1,0 +1,122 @@
+# docker-compose.yml — Schulbibliothek (mit Fehlern für Analyse-Aufgabe)
+#
+# ACHTUNG: Diese Datei enthält absichtlich zwei typische Fehler:
+#   1. Hartcodierte Zugangsdaten (Passwörter direkt im YAML)
+#   2. Fehlende Startreihenfolge mit Health-Check (Backend startet vor DB)
+#
+# Diese Datei dient als Analysebeispiel für Aufgabe 3.
+
+# ============================================================
+# FEHLERHAFTE VERSION (Prüfungsaufgabe: Fehler identifizieren)
+# ============================================================
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: bibliothek-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: bibliothek
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: SuperGeheim123!   # FEHLER 1: Hartcodiertes Passwort im Repository
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    image: bibliothek-backend:latest
+    container_name: bibliothek-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bibliothek
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: SuperGeheim123!  # FEHLER 1: Hartcodiertes Passwort im Repository
+      KEYCLOAK_AUTH_SERVER_URL: http://keycloak:8180/auth
+    # FEHLER 2: Kein depends_on mit Health-Check — Backend startet ggf. vor der Datenbank
+
+  frontend-benutzer:
+    image: bibliothek-frontend-user:latest
+    container_name: bibliothek-frontend-user
+    ports:
+      - "3000:80"
+    environment:
+      API_BASE_URL: http://backend:8080
+
+  frontend-admin:
+    image: bibliothek-frontend-admin:latest
+    container_name: bibliothek-frontend-admin
+    ports:
+      - "3001:80"
+    environment:
+      API_BASE_URL: http://backend:8080
+
+volumes:
+  postgres-data:
+
+---
+
+# ============================================================
+# KORRIGIERTE VERSION (Musterantwort)
+# ============================================================
+#
+# Änderungen gegenüber der fehlerhaften Version:
+#   1. Passwörter aus Umgebungsvariablen (env_file) statt hartcodiert
+#   2. depends_on mit health-check condition für korrekte Startreihenfolge
+#   3. Health-Check für postgres-Dienst definiert
+
+# services:
+#
+#   postgres:
+#     image: postgres:16
+#     container_name: bibliothek-db
+#     ports:
+#       - "5432:5432"
+#     env_file:
+#       - .env                          # LÖSUNG 1: Zugangsdaten aus .env-Datei (nicht im Repo)
+#     environment:
+#       POSTGRES_DB: bibliothek
+#     healthcheck:                      # LÖSUNG 2: Health-Check definieren
+#       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d bibliothek"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+#     volumes:
+#       - postgres-data:/var/lib/postgresql/data
+#
+#   backend:
+#     image: bibliothek-backend:latest
+#     container_name: bibliothek-backend
+#     ports:
+#       - "8080:8080"
+#     env_file:
+#       - .env                          # LÖSUNG 1: Zugangsdaten aus .env-Datei
+#     environment:
+#       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bibliothek
+#     depends_on:
+#       postgres:
+#         condition: service_healthy    # LÖSUNG 2: Backend wartet auf DB-Health-Check
+#
+#   frontend-benutzer:
+#     image: bibliothek-frontend-user:latest
+#     container_name: bibliothek-frontend-user
+#     ports:
+#       - "3000:80"
+#     depends_on:
+#       - backend
+#     environment:
+#       API_BASE_URL: http://backend:8080
+#
+#   frontend-admin:
+#     image: bibliothek-frontend-admin:latest
+#     container_name: bibliothek-frontend-admin
+#     ports:
+#       - "3001:80"
+#     depends_on:
+#       - backend
+#     environment:
+#       API_BASE_URL: http://backend:8080
+#
+# volumes:
+#   postgres-data:

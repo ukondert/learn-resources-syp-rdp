@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online-Bibliothek – Anmeldung</title>
+  <style>
+    /* ============================================================
+       ATOMS – Basis-Styles für kleinste UI-Elemente
+       ============================================================ */
+
+    /* Atom: Reset & Typografie */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      color: #1a1a2e;
+      background-color: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Atom: Label */
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.375rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* Atom: Input */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      display: block;
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      font-size: 1rem;
+      color: #1a1a2e;
+      background-color: #ffffff;
+      border: 1.5px solid #cbd5e0;
+      border-radius: 6px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #4a6fa5;
+      box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.15);
+    }
+
+    /* Atom: Button */
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary {
+      background-color: #4a6fa5;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: #3a5a8a;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Atom: Link */
+    a {
+      color: #4a6fa5;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Atom: Fehlermeldungs-Text */
+    .error-text {
+      font-size: 0.8rem;
+      color: #c53030;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    /* Atom: Logo-Icon (SVG-Buch) */
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      color: #4a6fa5;
+    }
+
+    /* Atom: Trennlinie */
+    hr.divider {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 1.25rem 0;
+    }
+
+    /* ============================================================
+       MOLECULES – Kombinationen von Atoms
+       ============================================================ */
+
+    /* Molecule: FormField (Label + Input + Fehlermeldung) */
+    .form-field {
+      margin-bottom: 1.25rem;
+    }
+
+    /* Molecule: Logo-Block (Icon + App-Name + Untertitel) */
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .logo-block__title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .logo-block__subtitle {
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    /* Molecule: Passwort-Zeile (Label + Input + Passwort-vergessen-Link) */
+    .password-field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.375rem;
+    }
+
+    /* Molecule: Registrierungs-Hinweis (Text + Link) */
+    .register-hint {
+      text-align: center;
+      font-size: 0.875rem;
+      color: #718096;
+    }
+
+    /* ============================================================
+       ORGANISMS – Eigenständige UI-Abschnitte
+       ============================================================ */
+
+    /* Organism: Anmelde-Formular (alle FormFields + Button + Hinweise) */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Organism: Header-Leiste */
+    .site-header {
+      background-color: #1a1a2e;
+      color: #ffffff;
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .site-header__brand {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #e2e8f0;
+    }
+
+    .site-header__nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .site-header__nav a {
+      color: #a0aec0;
+      font-size: 0.875rem;
+    }
+
+    .site-header__nav a:hover {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    /* Organism: Footer */
+    .site-footer {
+      background-color: #1a1a2e;
+      color: #718096;
+      text-align: center;
+      padding: 1rem 2rem;
+      font-size: 0.8rem;
+    }
+
+    /* ============================================================
+       TEMPLATES – Layout-Gerüst
+       ============================================================ */
+
+    /* Template: Anmeldeseite – zentrierte Karte mit Header/Footer */
+    .page-layout {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .page-layout__main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* ============================================================
+       PAGES – Fertige Seite mit echten Inhalten
+       ============================================================ */
+
+    /* Page: Login-Karte */
+    .login-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       ORGANISM: Site-Header
+       ============================================================ -->
+  <header class="site-header">
+    <span class="site-header__brand">📚 BiblioNet</span>
+    <nav class="site-header__nav">
+      <a href="#">Katalog</a>
+      <a href="#">Hilfe</a>
+    </nav>
+  </header>
+
+  <!-- ============================================================
+       TEMPLATE: Hauptbereich mit zentrierter Login-Karte
+       ============================================================ -->
+  <main class="page-layout__main">
+
+    <!-- ============================================================
+         PAGE: Login-Karte (Organism) mit echten Inhalten
+         ============================================================ -->
+    <div class="login-card">
+
+      <!-- MOLECULE: Logo-Block (Atom: SVG-Icon + Atom: Titel + Atom: Untertitel) -->
+      <div class="logo-block" style="margin-bottom: 2rem;">
+        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          <line x1="12" y1="6" x2="16" y2="6" />
+          <line x1="12" y1="10" x2="16" y2="10" />
+        </svg>
+        <h1 class="logo-block__title">Online-Bibliothek</h1>
+        <p class="logo-block__subtitle">Melden Sie sich an, um Bücher zu entleihen.</p>
+      </div>
+
+      <!-- ORGANISM: Anmelde-Formular -->
+      <form class="login-form" novalidate>
+
+        <!-- MOLECULE: FormField – Benutzername
+             Atoms: Label + Input[type=email] + Fehlermeldungs-Text -->
+        <div class="form-field">
+          <label for="email">E-Mail-Adresse</label>
+          <input type="email" id="email" name="email"
+                 placeholder="max.mustermann@mail.at"
+                 autocomplete="email" />
+          <span class="error-text" id="email-error">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span>
+        </div>
+
+        <!-- MOLECULE: Passwort-Zeile
+             Atoms: Label + Link "Passwort vergessen" + Input[type=password] + Fehlermeldungs-Text -->
+        <div class="form-field">
+          <div class="password-field-header">
+            <label for="password" style="margin-bottom: 0;">Passwort</label>
+            <a href="#">Passwort vergessen?</a>
+          </div>
+          <input type="password" id="password" name="password"
+                 placeholder="••••••••"
+                 autocomplete="current-password" />
+          <span class="error-text" id="password-error">Bitte geben Sie Ihr Passwort ein.</span>
+        </div>
+
+        <!-- Atom: Trennlinie -->
+        <hr class="divider" />
+
+        <!-- Atom: Button (Anmelden) -->
+        <button type="submit" class="btn btn-primary">Anmelden</button>
+
+        <!-- Molecule: Registrierungs-Hinweis (Text + Link) -->
+        <p class="register-hint" style="margin-top: 1.25rem;">
+          Noch kein Konto?
+          <a href="#">Jetzt registrieren</a>
+        </p>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       ORGANISM: Site-Footer
+       ============================================================ -->
+  <footer class="site-footer">
+    &copy; 2026 BiblioNet · Datenschutz · Impressum
+  </footer>
+
+</body>
+</html>
